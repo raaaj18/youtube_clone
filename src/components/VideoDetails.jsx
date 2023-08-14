@@ -17,26 +17,28 @@ const VideoDetails = () => {
 
     useEffect(() => {
         document.getElementById("root").classList.add("custom-h");
+        const fetchVideoDetails = () => {  
+            setLoading(true);
+            fetchDataFromApi(`video/details/?id=${id}`).then((res) => {
+                console.log(res);
+                setVideo(res);
+                setLoading(false);
+            });
+        };
+    
+        const fetchRelatedVideos = () => {
+            setLoading(true);
+            fetchDataFromApi(`video/related-contents/?id=${id}`).then((res) => {
+                console.log(res);
+                setRelatedVideos(res);
+                setLoading(false);
+            });
+        };
         fetchVideoDetails();
         fetchRelatedVideos();
-    }, [id]);
-    const fetchVideoDetails = () => {  
-        setLoading(true);
-        fetchDataFromApi(`video/details/?id=${id}`).then((res) => {
-            console.log(res);
-            setVideo(res);
-            setLoading(false);
-        });
-    };
-
-    const fetchRelatedVideos = () => {
-        setLoading(true);
-        fetchDataFromApi(`video/related-contents/?id=${id}`).then((res) => {
-            console.log(res);
-            setRelatedVideos(res);
-            setLoading(false);
-        });
-    };
+    }, [setRelatedVideos, id, setLoading]);
+    
+    if(video && id ){
 
     return (
         <div className="flex justify-center flex-row h-[calc(100%-56px)] bg-black">
@@ -109,6 +111,10 @@ const VideoDetails = () => {
             </div>
         </div>
     );
+                }
+                else {
+                    return <h1>Loading ...</h1>;
+                }
 };
 
 export default VideoDetails;
